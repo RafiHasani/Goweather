@@ -16,8 +16,8 @@ class Repository {
           url:
               "${EndPoint.baseUrl}/forecast.json?key=${AppConfig().apiKey}&q=$lat,$lng&days=14&aqi=yes");
 
-  Future<ApiResponse> getWeatherByAddressName(double lat, double lng) async =>
+  Future<ApiResponse> getWeatherSearchLocation(String locationName) async =>
       await HttpProvider().getRequest(
           url:
-              "${EndPoint.baseUrl}/forecast.json?key=${AppConfig().apiKey}&q=$lat,$lng&days=14&aqi=yes");
+              "${EndPoint.baseUrl}/search.json?key=${AppConfig().apiKey}&q=$locationName");
 }
