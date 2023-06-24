@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:go_weather/config/app_config.dart';
-import 'package:go_weather/controllers/weather_controller.dart';
-import 'package:go_weather/widgets/drawar.dart';
+import 'package:go_weather/config/router.dart';
+import 'package:go_weather/controllers/home_controller.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -13,7 +13,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<WeatherController>(builder: (xController) {
+    return GetBuilder<HomeController>(builder: (xController) {
       return Scaffold(
         key: navigationDrawarkey,
         backgroundColor: Colors.black,
@@ -48,27 +48,34 @@ class HomeScreen extends StatelessWidget {
               // Important: Remove any padding from the ListView.
               padding: EdgeInsets.zero,
               children: [
-                50.verticalSpace,
-                ListTile(
-                  leading: const Icon(
-                    Icons.add_location_alt_outlined,
-                  ),
-                  title: const Text('Other locations'),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                16.verticalSpace,
+                100.verticalSpace,
+                // ListTile(
+                //   leading: const Icon(
+                //     Icons.add_location_alt_outlined,
+                //   ),
+                //   title: const Text('Other locations'),
+                //   onTap: () {
+                //     Navigator.pop(context);
+                //   },
+                // ),
+
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(100, 2, 138, 124),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      navigationDrawarkey.currentState?.closeDrawer();
+                      Get.back();
+                      Get.toNamed(Routes.manageScreen);
+                    },
                     child: Text(
                       'Manage locations',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 )
@@ -121,96 +128,72 @@ class HomeScreen extends StatelessWidget {
                             children: [
                               WeatherDetailsWidget(
                                 title: "Temperature",
-                                degree:
-                                    xController.current?.feelslikeC.toString(),
+                                degree: xController
+                                    .weatherForecast?.current?.feelslikeC
+                                    .toString(),
                                 type: "C",
                                 icon: Icons.thermostat_sharp,
                                 showDegree: true,
                               ),
                               WeatherDetailsWidget(
                                 title: "Wind",
-                                degree: xController.current?.windKph.toString(),
+                                degree: xController
+                                    .weatherForecast?.current?.windKph
+                                    .toString(),
                                 type: "kmph",
                                 icon: Icons.wind_power_outlined,
                               ),
                               WeatherDetailsWidget(
                                 title: "Humidty",
-                                degree:
-                                    xController.current?.humidity.toString(),
+                                degree: xController
+                                    .weatherForecast?.current?.humidity
+                                    .toString(),
                                 type: "%",
                                 icon: Symbols.humidity_percentage,
                               ),
                               WeatherDetailsWidget(
                                 title: "Cloudy",
-                                degree: xController.current?.cloud.toString(),
+                                degree: xController
+                                    .weatherForecast?.current?.cloud
+                                    .toString(),
                                 type: "",
                                 icon: Icons.wb_cloudy_outlined,
                               ),
                               WeatherDetailsWidget(
                                 title: "Perciptation",
-                                degree:
-                                    xController.current?.precipIn.toString(),
+                                degree: xController
+                                    .weatherForecast?.current?.precipIn
+                                    .toString(),
                                 type: "In",
                                 icon: Symbols.rainy,
                               ),
                               WeatherDetailsWidget(
                                 title: "Pressure",
-                                degree:
-                                    xController.current?.precipIn.toString(),
+                                degree: xController
+                                    .weatherForecast?.current?.precipIn
+                                    .toString(),
                                 type: "In",
                                 icon: Symbols.blood_pressure_sharp,
                               ),
                               WeatherDetailsWidget(
                                 title: "Visibilty",
-                                degree: xController.current?.visKm.toString(),
+                                degree: xController
+                                    .weatherForecast?.current?.visKm
+                                    .toString(),
                                 type: "KM",
                                 icon: Icons.visibility,
                               ),
                               WeatherDetailsWidget(
                                 title: "uv",
-                                degree: xController.current?.uv.toString(),
+                                degree: xController.weatherForecast?.current?.uv
+                                    .toString(),
                                 type: "",
                                 icon: Icons.light_mode,
                               ),
                             ]),
                       ),
-
                       const DividerWidget(),
                       8.verticalSpace,
-
-                      // SizedBox(
-                      //   height: 200.h,
-                      //   child: LineChart(
-                      //     LineChartData(
-                      //       lineTouchData: lineTouchData1,
-                      //       gridData: gridData,
-                      //       // titlesData: titlesData1,
-                      //       borderData: borderData,
-                      //       lineBarsData: lineBarsData1,
-                      //       minX: -50,
-                      //       maxX: 1,
-                      //       maxY: 50,
-                      //       minY: -50,
-                      //     ),
-                      //     duration: const Duration(milliseconds: 250),
-                      //   ),
-                      // ),
-
-                      // Text(
-                      //   "Forecast 14 days",
-                      //   style: TextStyle(
-                      //     fontSize: 10.sp,
-                      //     color: Colors.white70,
-                      //     fontWeight: FontWeight.bold,
-                      //   ),
-                      //   textAlign: TextAlign.start,
-                      // ),
-                      // 8.verticalSpace,
-                      // SizedBox(
-                      //   height: 140.h,
-                      // ),
-                      // const DividerWidget(),
-                      // 8.verticalSpace,
                       Text(
                         "Forecast 14 days",
                         style: TextStyle(
@@ -222,7 +205,7 @@ class HomeScreen extends StatelessWidget {
                       ),
                       8.verticalSpace,
                       SizedBox(
-                        height: 100.h,
+                        height: 120.h,
                         width: 1.sw,
                         child: ListView.builder(
                           itemCount: xController.forecastList?.length ?? 0,
@@ -244,6 +227,15 @@ class HomeScreen extends StatelessWidget {
                                         .elementAt(index)
                                         .date ??
                                     DateTime.now().toString()),
+                                nighticon:
+                                    "assets/weather${xController.getImageName(xController.forecastList?.elementAt(index).hour?.elementAt(0).condition?.icon ?? "113.png")}",
+                                min: xController.forecastList
+                                        ?.elementAt(index)
+                                        .hour
+                                        ?.elementAt(11)
+                                        .feelslikeC
+                                        .toString() ??
+                                    "",
                               ),
                             );
                           }),
@@ -263,18 +255,25 @@ class HomeScreen extends StatelessWidget {
 
 class ForecastWidget extends StatelessWidget {
   final String dayicon;
-  final String max;
   final String day;
+  final String max;
+  final String nighticon;
+  final String min;
 
-  ForecastWidget(
-      {Key? key, required this.dayicon, required this.max, required this.day})
-      : super(key: key);
+  ForecastWidget({
+    Key? key,
+    required this.dayicon,
+    required this.max,
+    required this.day,
+    required this.nighticon,
+    required this.min,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 100.h,
-        width: 80.h,
+        height: 120.h,
+        width: 70.h,
         padding: EdgeInsets.all(10.r),
         decoration: BoxDecoration(
           border: Border.all(
@@ -284,7 +283,7 @@ class ForecastWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(16.r),
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
               day,
@@ -295,43 +294,103 @@ class ForecastWidget extends StatelessWidget {
               ),
             ),
             4.verticalSpace,
-            Image.asset(
-              dayicon,
-              color: Colors.white,
-              scale: 1.h,
-            ),
-            4.verticalSpace,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  max,
-                  style: TextStyle(
-                    fontSize: 10.sp,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white60,
-                  ),
-                ),
-                Transform.translate(
-                  offset: const Offset(-2, -4),
-                  child: Container(
-                    height: 3.h,
-                    width: 3.h,
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 1, color: Colors.white38),
-                      borderRadius: BorderRadius.circular(8.r),
+                Column(
+                  children: [
+                    Image.asset(
+                      dayicon,
+                      color: Colors.white,
+                      height: 24.h,
+                      width: 24.h,
                     ),
-                    child: Container(),
-                  ),
+                    4.verticalSpace,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          max,
+                          style: TextStyle(
+                            fontSize: 10.sp,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white60,
+                          ),
+                        ),
+                        Transform.translate(
+                          offset: const Offset(1, -4),
+                          child: Container(
+                            height: 3.h,
+                            width: 3.h,
+                            decoration: BoxDecoration(
+                              border:
+                                  Border.all(width: 1, color: Colors.white38),
+                              borderRadius: BorderRadius.circular(8.r),
+                            ),
+                            child: Container(),
+                          ),
+                        ),
+                        Text(
+                          "C",
+                          style: TextStyle(
+                            fontSize: 10.sp,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white60,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                Text(
-                  "C",
-                  style: TextStyle(
-                    fontSize: 10.sp,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white60,
-                  ),
+                Divider(
+                  height: 1,
+                ),
+                Column(
+                  children: [
+                    Image.asset(
+                      nighticon,
+                      color: Colors.white,
+                      height: 24.h,
+                      width: 24.h,
+                    ),
+                    4.verticalSpace,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          min,
+                          style: TextStyle(
+                            fontSize: 10.sp,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white60,
+                          ),
+                        ),
+                        Transform.translate(
+                          offset: const Offset(1, -4),
+                          child: Container(
+                            height: 3.h,
+                            width: 3.h,
+                            decoration: BoxDecoration(
+                              border:
+                                  Border.all(width: 1, color: Colors.white38),
+                              borderRadius: BorderRadius.circular(8.r),
+                            ),
+                            child: Container(),
+                          ),
+                        ),
+                        Text(
+                          "C",
+                          style: TextStyle(
+                            fontSize: 10.sp,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white60,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -341,13 +400,13 @@ class ForecastWidget extends StatelessWidget {
 }
 
 class WeatherDetailsWidget extends StatelessWidget {
-  String title;
-  String? degree;
-  String type;
-  IconData icon;
-  bool? showDegree;
+  final String title;
+  final String? degree;
+  final String type;
+  final IconData icon;
+  final bool? showDegree;
 
-  WeatherDetailsWidget({
+  const WeatherDetailsWidget({
     Key? key,
     required this.title,
     this.degree,
@@ -447,7 +506,7 @@ class DividerWidget extends StatelessWidget {
 }
 
 class HeadingWidget extends StatelessWidget {
-  final WeatherController? xController;
+  final HomeController? xController;
 
   HeadingWidget({
     this.xController,
@@ -476,7 +535,7 @@ class HeadingWidget extends StatelessWidget {
               Column(
                 children: [
                   Text(
-                    xController?.currentWeather?.location?.name ?? "_ _",
+                    xController?.weatherForecast?.location?.name ?? "_ _",
                     style:
                         TextStyle(fontSize: 24.sp, fontWeight: FontWeight.bold),
                   ),
@@ -495,7 +554,7 @@ class HeadingWidget extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               DegreeWidget(
-                degree: xController?.currentWeather?.current?.feelslikeC
+                degree: xController?.weatherForecast?.current?.feelslikeC
                         .toString() ??
                     "0",
                 degreeIconSize: 8,
@@ -507,7 +566,7 @@ class HeadingWidget extends StatelessWidget {
               ),
               16.verticalSpace,
               Text(
-                "${xController?.currentWeather?.location?.region ?? ""} ${xController?.currentWeather?.location?.country ?? ""}",
+                "${xController?.weatherForecast?.location?.region ?? ""} ${xController?.weatherForecast?.location?.country ?? ""}",
                 style: TextStyle(
                   fontSize: 10.sp,
                   color: Colors.white70,
@@ -520,9 +579,9 @@ class HeadingWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  xController?.currentWeather?.current?.condition != null
+                  xController?.weatherForecast?.current?.condition != null
                       ? Image.asset(
-                          "assets/weather${xController?.getImageName(xController!.currentWeather!.current!.condition!.icon ?? "113.png")}",
+                          "assets/weather${xController?.getImageName(xController!.weatherForecast!.current!.condition!.icon ?? "113.png")}",
                           color: Colors.white,
                           scale: 1.h,
                         )
@@ -532,7 +591,8 @@ class HeadingWidget extends StatelessWidget {
                           size: 28,
                         ),
                   Text(
-                    xController?.currentWeather?.current?.condition?.text ?? "",
+                    xController?.weatherForecast?.current?.condition?.text ??
+                        "",
                     style: TextStyle(
                       fontSize: 10.sp,
                       fontWeight: FontWeight.bold,
@@ -543,7 +603,7 @@ class HeadingWidget extends StatelessWidget {
               16.verticalSpace,
               Text(
                 xController?.getDateFormated(xController
-                            ?.currentWeather?.location?.localtime
+                            ?.weatherForecast?.location?.localtime
                             .toString() ??
                         DateTime.now().toString()) ??
                     "",
@@ -563,17 +623,17 @@ class HeadingWidget extends StatelessWidget {
 }
 
 class DegreeWidget extends StatelessWidget {
-  Offset offset;
-  double degreeIconSize;
-  double width;
-  Color? color;
-  double borderRadius;
-  String degree;
-  Color? degreeColor;
-  double degreeFontSize;
-  FontWeight degreeFontWeigth;
+  final Offset offset;
+  final double degreeIconSize;
+  final double width;
+  final Color? color;
+  final double borderRadius;
+  final String degree;
+  final Color? degreeColor;
+  final double degreeFontSize;
+  final FontWeight degreeFontWeigth;
 
-  DegreeWidget({
+  const DegreeWidget({
     super.key,
     required this.offset,
     required this.degreeIconSize,

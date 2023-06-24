@@ -11,10 +11,10 @@ class Repository {
               "${EndPoint.baseUrl}/current.json?key=${AppConfig().apiKey}&q=$lat,$lng");
 
   Future<ApiResponse> getWeatherForecastByCoordinates(
-          double lat, double lng) async =>
+          {int? days = 14, required lat, required double lng}) async =>
       await HttpProvider().getRequest(
           url:
-              "${EndPoint.baseUrl}/forecast.json?key=${AppConfig().apiKey}&q=$lat,$lng&days=14&aqi=yes");
+              "${EndPoint.baseUrl}/forecast.json?key=${AppConfig().apiKey}&q=$lat,$lng&days=$days&aqi=yes");
 
   Future<ApiResponse> getWeatherSearchLocation(String locationName) async =>
       await HttpProvider().getRequest(

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:go_weather/config/router.dart';
+import 'package:go_weather/screens/add_location.dart';
 import 'package:go_weather/screens/home.dart';
+import 'package:go_weather/screens/manage_locations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:go_weather/config/get_binder.dart';
 
@@ -33,10 +36,14 @@ class MainApp extends StatelessWidget {
             scaffoldBackgroundColor: const Color(0xFF282E45),
           ),
           initialBinding: WeatherBinding(),
-          home: child,
+          initialRoute: Routes.homeScreen,
+          routes: {
+            Routes.homeScreen: (context) => HomeScreen(),
+            Routes.manageScreen: (context) => ManageLocations(),
+            Routes.addLocationScreen: (context) => AddLocation(),
+          },
         );
       },
-      child: HomeScreen(),
     );
   }
 }
