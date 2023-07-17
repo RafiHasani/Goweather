@@ -22,7 +22,7 @@ class LoadingOverlay extends StatelessWidget {
           Center(
             child: CircularProgressIndicator(
               valueColor:
-                  AlwaysStoppedAnimation<Color>(AppConfig().kGreenColor),
+                  AlwaysStoppedAnimation<Color>(AppConfig.instance.kGreenColor),
             ),
           ),
       ],

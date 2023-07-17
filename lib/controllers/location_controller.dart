@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:go_weather/config/app_config.dart';
 import 'package:go_weather/data/models/api_response.dart';
 import 'package:go_weather/data/models/locations_autocomplete_model.dart';
 import 'package:go_weather/data/models/weather_forecast.dart';
@@ -17,6 +18,7 @@ class LocationController extends GetxController {
 
   List<Forecastday>? forecastList;
   WeatherForecast? weatherForecast;
+  List<WeatherForecast>? locationsWeatherForcast;
 
   List<LocationsAutoCompletModel> locationsAutoCompleteList = [];
 
@@ -76,11 +78,12 @@ class LocationController extends GetxController {
           await repo.getWeatherSearchLocation(searchLocation);
 
       if (response.statusCode == 200) {
+        locationsAutoCompleteList.clear();
         List<dynamic> list = response.data;
-        list.forEach((element) {
+        for (var element in list) {
           locationsAutoCompleteList
               .add(LocationsAutoCompletModel.fromJson(element));
-        });
+        }
 
         update();
       } else {
@@ -94,6 +97,50 @@ class LocationController extends GetxController {
       }
     } finally {
       isLoading = false;
+    }
+  }
+
+  Future<ApiResponse?> getLocationsListForcast(double lat, double lng) async {
+    try {
+      ApiResponse response = await repo.getWeatherForecastByCoordinates(
+          lat: lat, lng: lng, days: 1);
+
+      if (response.statusCode == 200) {
+        // weatherForecast = WeatherForecast.fromJson(response.data);
+        // forecastList = weatherForecast?.forecast?.forecastday;
+
+        return response;
+      } else {
+        if (kDebugMode) {
+          print(response.message);
+        }
+        return null;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+      return null;
+    }
+  }
+
+  getLocationsForcast() async {
+    List<ApiResponse> responseList = [];
+    if (AppConfig.instance.listofLocations != null) {
+      AppConfig.instance.listofLocations?.forEach((element) async {
+        ApiResponse? response =
+            await getLocationsListForcast(element.lat!, element.lon!);
+        if (response != null) {
+          responseList.add(response);
+        }
+      });
+    } else {
+      return;
+    }
+
+    for (var element in responseList) {
+      WeatherForecast weatherForecast = WeatherForecast.fromJson(element.data);
+      locationsWeatherForcast?.add(weatherForecast);
     }
   }
 }

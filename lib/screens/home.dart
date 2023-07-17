@@ -7,7 +7,7 @@ import 'package:go_weather/controllers/home_controller.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key}) {}
+  HomeScreen({super.key});
 
   final GlobalKey<ScaffoldState> navigationDrawarkey = GlobalKey();
 
@@ -17,19 +17,7 @@ class HomeScreen extends StatelessWidget {
       return Scaffold(
         key: navigationDrawarkey,
         backgroundColor: Colors.black,
-        appBar: AppBar(
-          backgroundColor: AppConfig().kGreenColor,
-          leadingWidth: 80,
-          leading: Expanded(
-            flex: 1,
-            child: IconButton(
-              onPressed: () {
-                navigationDrawarkey.currentState!.openDrawer();
-              },
-              icon: const Icon(Icons.menu_open_rounded),
-            ),
-          ),
-        ),
+
         //Drawar
         drawer: Drawer(
           width: 0.8.sw,
@@ -90,6 +78,9 @@ class HomeScreen extends StatelessWidget {
           children: [
             HeadingWidget(
               xController: xController,
+              menuButtonCallback: () {
+                navigationDrawarkey.currentState!.openDrawer();
+              },
             ),
             16.verticalSpace,
             Expanded(
@@ -114,7 +105,7 @@ class HomeScreen extends StatelessWidget {
                         textAlign: TextAlign.start,
                       ),
                       SizedBox(
-                        height: 160.h,
+                        height: 180.h,
                         width: 1.sw,
                         child: GridView(
                             physics: const NeverScrollableScrollPhysics(),
@@ -205,7 +196,7 @@ class HomeScreen extends StatelessWidget {
                       ),
                       8.verticalSpace,
                       SizedBox(
-                        height: 120.h,
+                        height: 140.h,
                         width: 1.sw,
                         child: ListView.builder(
                           itemCount: xController.forecastList?.length ?? 0,
@@ -272,7 +263,7 @@ class ForecastWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 120.h,
+        height: 140.h,
         width: 70.h,
         padding: EdgeInsets.all(10.r),
         decoration: BoxDecoration(
@@ -507,113 +498,151 @@ class DividerWidget extends StatelessWidget {
 
 class HeadingWidget extends StatelessWidget {
   final HomeController? xController;
+  Function() menuButtonCallback;
 
   HeadingWidget({
     this.xController,
+    required this.menuButtonCallback,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 0.35.sh,
+      height: 0.5.sh,
       width: 1.sw,
       decoration: BoxDecoration(
-        color: AppConfig().kGreenColor,
+        color: AppConfig.instance.kGreenColor,
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(30.r),
           bottomRight: Radius.circular(30.r),
         ),
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.start,
+          40.verticalSpace,
+          Padding(
+            padding: EdgeInsetsDirectional.only(start: 20.w),
+            child: IconButton(
+                onPressed: () {
+                  menuButtonCallback();
+                },
+                icon: const Icon(
+                  Icons.menu_open_sharp,
+                )),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
+              8.verticalSpace,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    xController?.weatherForecast?.location?.name ?? "_ _",
-                    style:
-                        TextStyle(fontSize: 24.sp, fontWeight: FontWeight.bold),
-                  ),
-                  8.verticalSpace,
-                  const Icon(
-                    Icons.pin_drop,
-                    color: Colors.white70,
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        xController?.weatherForecast?.location?.name ?? "_ _",
+                        style: TextStyle(
+                            fontSize: 24.sp, fontWeight: FontWeight.bold),
+                      ),
+                      Transform.translate(
+                        offset: Offset(1.w, -2.h),
+                        child: const Icon(
+                          Icons.location_on,
+                          color: Colors.white54,
+                          size: 12,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              DegreeWidget(
-                degree: xController?.weatherForecast?.current?.feelslikeC
-                        .toString() ??
-                    "0",
-                degreeIconSize: 8,
-                borderRadius: 8,
-                degreeFontSize: 42,
-                degreeFontWeigth: FontWeight.bold,
-                width: 3,
-                offset: const Offset(4, -20),
-              ),
               16.verticalSpace,
-              Text(
-                "${xController?.weatherForecast?.location?.region ?? ""} ${xController?.weatherForecast?.location?.country ?? ""}",
-                style: TextStyle(
-                  fontSize: 10.sp,
-                  color: Colors.white70,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              16.verticalSpace,
-              Row(
+              Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  xController?.weatherForecast?.current?.condition != null
-                      ? Image.asset(
-                          "assets/weather${xController?.getImageName(xController!.weatherForecast!.current!.condition!.icon ?? "113.png")}",
-                          color: Colors.white,
-                          scale: 1.h,
-                        )
-                      : const Icon(
-                          Icons.wb_cloudy_outlined,
-                          color: Colors.white,
-                          size: 28,
-                        ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      DegreeWidget(
+                        degree: xController
+                                ?.weatherForecast?.current?.feelslikeC
+                                .toString() ??
+                            "0",
+                        degreeIconSize: 8,
+                        borderRadius: 8,
+                        degreeFontSize: 42,
+                        degreeFontWeigth: FontWeight.bold,
+                        width: 3,
+                        offset: const Offset(4, -20),
+                        color: Colors.white54,
+                      ),
+                      const Text(
+                        'C',
+                        style: TextStyle(fontSize: 24, color: Colors.white),
+                      ),
+                    ],
+                  ),
+                  16.verticalSpace,
                   Text(
-                    xController?.weatherForecast?.current?.condition?.text ??
-                        "",
+                    "${xController?.weatherForecast?.location?.region ?? ""} ${xController?.weatherForecast?.location?.country ?? ""}",
                     style: TextStyle(
                       fontSize: 10.sp,
+                      color: Colors.white70,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  16.verticalSpace,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      xController?.weatherForecast?.current?.condition != null
+                          ? Image.asset(
+                              "assets/weather${xController?.getImageName(xController!.weatherForecast!.current!.condition!.icon ?? "113.png")}",
+                              color: Colors.white,
+                              scale: 1.h,
+                            )
+                          : const Icon(
+                              Icons.wb_cloudy_outlined,
+                              color: Colors.white,
+                              size: 28,
+                            ),
+                      Text(
+                        xController
+                                ?.weatherForecast?.current?.condition?.text ??
+                            "",
+                        style: TextStyle(
+                            fontSize: 10.sp,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
+                    ],
+                  ),
+                  16.verticalSpace,
+                  Text(
+                    xController?.getDateFormated(xController
+                                ?.weatherForecast?.location?.localtime
+                                .toString() ??
+                            DateTime.now().toString()) ??
+                        "",
+                    style: TextStyle(
+                      fontSize: 10.sp,
+                      color: Colors.white70,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  16.verticalSpace,
                 ],
               ),
-              16.verticalSpace,
-              Text(
-                xController?.getDateFormated(xController
-                            ?.weatherForecast?.location?.localtime
-                            .toString() ??
-                        DateTime.now().toString()) ??
-                    "",
-                style: TextStyle(
-                  fontSize: 10.sp,
-                  color: Colors.white70,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              16.verticalSpace,
             ],
           ),
         ],

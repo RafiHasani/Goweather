@@ -91,6 +91,8 @@ class HomeController extends GetxController {
 
       locationData = await location.getLocation();
 
+      
+
       ApiResponse response = await repo.getWeatherForecastByCoordinates(
           lat: locationData.latitude ?? 48.8567,
           lng: locationData.longitude ?? 2.3508,

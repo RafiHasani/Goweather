@@ -4,39 +4,46 @@ import 'package:get/get.dart';
 
 import 'package:go_weather/config/app_config.dart';
 import 'package:go_weather/config/router.dart';
+import 'package:go_weather/controllers/location_controller.dart';
 import 'package:go_weather/widgets/app_bar_widget.dart';
 
 class ManageLocations extends StatelessWidget {
-  const ManageLocations({super.key});
+  ManageLocations({super.key}) {
+    LocationController locationController = LocationController();
+    Get.put(locationController);
+    locationController.getLocationsForcast();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black54,
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AppBarWidget(
-              title: 'Manage locations',
-              showActionList: true,
-              actionList: [
-                IconButton(
-                  onPressed: () {
-                    Get.toNamed(Routes.addLocationScreen);
-                  },
-                  icon: Icon(
-                    Icons.add_location_alt_outlined,
-                    size: 16.h,
+    return GetBuilder<LocationController>(builder: (locationController) {
+      return Scaffold(
+        backgroundColor: Colors.black54,
+        body: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              AppBarWidget(
+                title: 'Manage locations',
+                showActionList: true,
+                actionList: [
+                  IconButton(
+                    onPressed: () {
+                      Get.toNamed(Routes.addLocationScreen);
+                    },
+                    icon: Icon(
+                      Icons.add_location_alt_outlined,
+                      size: 16.h,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            16.verticalSpace,
-            Expanded(
-              child: ListView.builder(
-                  itemCount: 0,
+                ],
+              ),
+              16.verticalSpace,
+              Expanded(
+                child: ListView.builder(
+                  itemCount:
+                      locationController.locationsWeatherForcast?.length ?? 0,
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -50,12 +57,14 @@ class ManageLocations extends StatelessWidget {
                         minDegree: "20",
                       ),
                     );
-                  }),
-            )
-          ],
+                  },
+                ),
+              )
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 
@@ -124,7 +133,7 @@ class LocationWeatherWidget extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  AppConfig().dateFormat(DateTime.now()),
+                  AppConfig.instance.dateFormat(DateTime.now()),
                   style: TextStyle(
                     fontSize: 11.sp,
                     fontWeight: FontWeight.normal,

@@ -8,16 +8,16 @@ class Repository {
           double lat, double lng) async =>
       await HttpProvider().getRequest(
           url:
-              "${EndPoint.baseUrl}/current.json?key=${AppConfig().apiKey}&q=$lat,$lng");
+              "${EndPoint.baseUrl}/current.json?key=${AppConfig.instance.apiKey}&q=$lat,$lng");
 
   Future<ApiResponse> getWeatherForecastByCoordinates(
           {int? days = 14, required lat, required double lng}) async =>
       await HttpProvider().getRequest(
           url:
-              "${EndPoint.baseUrl}/forecast.json?key=${AppConfig().apiKey}&q=$lat,$lng&days=$days&aqi=yes");
+              "${EndPoint.baseUrl}/forecast.json?key=${AppConfig.instance.apiKey}&q=$lat,$lng&days=$days&aqi=yes");
 
-  Future<ApiResponse> getWeatherSearchLocation(String locationName) async =>
+  Future<ApiResponse> getWeatherSearchLocation(String? locationName) async =>
       await HttpProvider().getRequest(
           url:
-              "${EndPoint.baseUrl}/search.json?key=${AppConfig().apiKey}&q=$locationName");
+              "${EndPoint.baseUrl}/search.json?key=${AppConfig.instance.apiKey}&q=$locationName");
 }

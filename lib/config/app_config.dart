@@ -1,14 +1,23 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:go_weather/data/models/locations_autocomplete_model.dart';
 import 'package:intl/intl.dart';
 
 class AppConfig {
-  static final AppConfig _singleton = AppConfig._internal();
-
-  factory AppConfig() {
-    return _singleton;
+  static AppConfig instance = AppConfig();
+  AppConfig() {
+    readStorage();
   }
 
-  AppConfig._internal();
+  readStorage() {
+    var item = GetStorage().read(locationsKeyStorage);
+    print(item);
+  }
+
+  String locationsKeyStorage = 'locations';
+
+  List<LocationsAutoCompletModel>? listofLocations;
 
   String apiKey = "be7b2016c758473eb4f153604232006";
 
@@ -19,5 +28,16 @@ class AppConfig {
     String time = DateFormat.jm().format(dateTime);
 
     return "${formatter.format(dateTime)}  $time";
+  }
+
+  addStorageEntry(String key, dynamic obj) {
+    GetStorage().write(key, obj);
+    if (kDebugMode) {
+      print(GetStorage().read(key).toString());
+    }
+  }
+
+  dynamic readStorageEntry(String key) {
+    return GetStorage().read(key);
   }
 }

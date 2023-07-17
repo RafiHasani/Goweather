@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:go_weather/config/router.dart';
 import 'package:go_weather/screens/add_location.dart';
 import 'package:go_weather/screens/home.dart';
 import 'package:go_weather/screens/manage_locations.dart';
+import 'package:go_weather/screens/splash.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:go_weather/config/get_binder.dart';
 
-void main() {
+Future<void> main() async {
+  await GetStorage.init();
   runApp(const MainApp());
 }
 
@@ -36,11 +39,12 @@ class MainApp extends StatelessWidget {
             scaffoldBackgroundColor: const Color(0xFF282E45),
           ),
           initialBinding: WeatherBinding(),
-          initialRoute: Routes.homeScreen,
+          initialRoute: Routes.splashScreen,
           routes: {
+            Routes.splashScreen: (context) => const SplashScreen(),
             Routes.homeScreen: (context) => HomeScreen(),
             Routes.manageScreen: (context) => ManageLocations(),
-            Routes.addLocationScreen: (context) => AddLocation(),
+            Routes.addLocationScreen: (context) => const AddLocation(),
           },
         );
       },
