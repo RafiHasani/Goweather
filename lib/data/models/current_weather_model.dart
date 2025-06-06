@@ -1,14 +1,14 @@
 class CurrentWeather {
-  mLocation? location;
-  mCurrent? current;
+  MLocation? location;
+  MCurrent? current;
 
   CurrentWeather({this.location, this.current});
 
   CurrentWeather.fromJson(Map<String, dynamic> json) {
     location =
-        json['location'] != null ? mLocation.fromJson(json['location']) : null;
+        json['location'] != null ? MLocation.fromJson(json['location']) : null;
     current =
-        json['current'] != null ? mCurrent.fromJson(json['current']) : null;
+        json['current'] != null ? MCurrent.fromJson(json['current']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -21,7 +21,7 @@ class CurrentWeather {
   }
 }
 
-class mLocation {
+class MLocation {
   String? name;
   String? region;
   String? country;
@@ -31,7 +31,7 @@ class mLocation {
   int? localtimeEpoch;
   String? localtime;
 
-  mLocation(
+  MLocation(
       {this.name,
       this.region,
       this.country,
@@ -41,7 +41,7 @@ class mLocation {
       this.localtimeEpoch,
       this.localtime});
 
-  mLocation.fromJson(Map<String, dynamic> json) {
+  MLocation.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     region = json['region'];
     country = json['country'];
@@ -66,7 +66,7 @@ class mLocation {
   }
 }
 
-class mCurrent {
+class MCurrent {
   int? lastUpdatedEpoch;
   String? lastUpdated;
   double? tempC;
@@ -91,7 +91,7 @@ class mCurrent {
   double? gustMph;
   double? gustKph;
 
-  mCurrent(
+  MCurrent(
       {this.lastUpdatedEpoch,
       this.lastUpdated,
       this.tempC,
@@ -116,7 +116,7 @@ class mCurrent {
       this.gustMph,
       this.gustKph});
 
-  mCurrent.fromJson(Map<String, dynamic> json) {
+  MCurrent.fromJson(Map<String, dynamic> json) {
     lastUpdatedEpoch = json['last_updated_epoch'];
     lastUpdated = json['last_updated'];
     tempC = json['temp_c'];

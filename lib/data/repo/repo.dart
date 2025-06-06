@@ -5,16 +5,22 @@ import 'package:go_weather/data/repo/end_points.dart';
 
 class Repository {
   Future<ApiResponse> getCurrentWeatherByCoordinates(
-          double lat, double lng) async =>
-      await HttpProvider().getRequest(
-          url:
-              "${EndPoint.baseUrl}/current.json?key=${AppConfig.instance.apiKey}&q=$lat,$lng");
+      double lat, double lng) async {
+    final response = await HttpProvider().getRequest(
+        url:
+            "${EndPoint.baseUrl}/current.json?q=$lat,$lng&key=${AppConfig.instance.apiKey}");
+
+    return response;
+  }
 
   Future<ApiResponse> getWeatherForecastByCoordinates(
-          {int? days = 14, required lat, required double lng}) async =>
-      await HttpProvider().getRequest(
-          url:
-              "${EndPoint.baseUrl}/forecast.json?key=${AppConfig.instance.apiKey}&q=$lat,$lng&days=$days&aqi=yes");
+      {int? days = 14, required double lat, required double lng}) async {
+    final response = await HttpProvider().getRequest(
+      url:
+          "${EndPoint.baseUrl}/forecast.json?q=$lat,$lng&days=14&key=${AppConfig.instance.apiKey}",
+    );
+    return response;
+  }
 
   Future<ApiResponse> getWeatherSearchLocation(String? locationName) async =>
       await HttpProvider().getRequest(

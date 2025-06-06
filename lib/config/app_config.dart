@@ -7,19 +7,19 @@ import 'package:intl/intl.dart';
 class AppConfig {
   static AppConfig instance = AppConfig();
   AppConfig() {
-    readStorage();
+    // readStorage();
   }
 
   readStorage() {
     var item = GetStorage().read(locationsKeyStorage);
-    print(item);
+    debugPrint(item);
   }
 
   String locationsKeyStorage = 'locations';
 
   List<LocationsAutoCompletModel>? listofLocations;
 
-  String apiKey = "be7b2016c758473eb4f153604232006";
+  String apiKey = "95df1309e697457fb83200235251304";
 
   Color kGreenColor = const Color(0xFF028a7c);
 

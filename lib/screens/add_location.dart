@@ -134,8 +134,8 @@ class AddLocation extends StatelessWidget {
                       return Padding(
                         padding: EdgeInsets.symmetric(horizontal: 20.w),
                         child: LocationsWidget(
-                          location:
-                              AppConfig.instance.listofLocations!.elementAt(index),
+                          location: AppConfig.instance.listofLocations!
+                              .elementAt(index),
                         ),
                       );
                     },
@@ -151,20 +151,20 @@ class AddLocation extends StatelessWidget {
 
   addtoLocationList(LocationsAutoCompletModel location) {
     if (AppConfig.instance.listofLocations != null) {
-      if (AppConfig.instance
-          .listofLocations!
+      if (AppConfig.instance.listofLocations!
           .any((element) => element.id == location.id)) {
         return;
       } else {
         AppConfig.instance.listofLocations?.add(location);
         AppConfig.instance.addStorageEntry(
-            AppConfig.instance.locationsKeyStorage, AppConfig.instance.listofLocations);
+            AppConfig.instance.locationsKeyStorage,
+            AppConfig.instance.listofLocations);
       }
     } else {
       AppConfig.instance.listofLocations = [];
       AppConfig.instance.listofLocations?.add(location);
-      AppConfig.instance.addStorageEntry(
-          AppConfig.instance.locationsKeyStorage, AppConfig.instance.listofLocations);
+      AppConfig.instance.addStorageEntry(AppConfig.instance.locationsKeyStorage,
+          AppConfig.instance.listofLocations);
     }
     Get.back();
   }
@@ -173,9 +173,9 @@ class AddLocation extends StatelessWidget {
 class LocationsWidget extends StatelessWidget {
   final LocationsAutoCompletModel location;
   const LocationsWidget({
-    Key? key,
+    super.key,
     required this.location,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

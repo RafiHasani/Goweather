@@ -11,61 +11,60 @@ class HomeController extends GetxController {
   @override
   Future<void> onInit() async {
     super.onInit();
+    await getCurrentWeather();
     await getWeatherForecast(days: 14);
   }
 
-  // mCurrent? current;
-  // CurrentWeather? currentWeather;
+  WeatherForecast? currentWeather;
 
   List<Forecastday>? forecastList;
   WeatherForecast? weatherForecast;
 
-  // Future<void> getCurentWeather() async {
-  //   try {
-  //     Location location = Location();
+  Future<void> getCurrentWeather() async {
+    try {
+      Location location = Location();
 
-  //     bool serviceEnabled;
-  //     LocationData locationData;
-  //     PermissionStatus permissionGranted;
+      bool serviceEnabled;
+      LocationData locationData;
+      PermissionStatus permissionGranted;
 
-  //     serviceEnabled = await location.serviceEnabled();
-  //     if (!serviceEnabled) {
-  //       serviceEnabled = await location.requestService();
-  //       if (!serviceEnabled) {
-  //         return;
-  //       }
-  //     }
+      serviceEnabled = await location.serviceEnabled();
+      if (!serviceEnabled) {
+        serviceEnabled = await location.requestService();
+        if (!serviceEnabled) {
+          return;
+        }
+      }
 
-  //     permissionGranted = await location.hasPermission();
-  //     if (permissionGranted == PermissionStatus.denied) {
-  //       permissionGranted = await location.requestPermission();
-  //       if (permissionGranted != PermissionStatus.granted) {
-  //         return;
-  //       }
-  //     }
+      permissionGranted = await location.hasPermission();
 
-  //     locationData = await location.getLocation();
+      if (permissionGranted == PermissionStatus.denied) {
+        permissionGranted = await location.requestPermission();
+        if (permissionGranted != PermissionStatus.granted) {
+          return;
+        }
+      }
 
-  //     ApiResponse response = await repo.getCurrentWeatherByCoordinates(
-  //         locationData.latitude ?? 48.8567, locationData.longitude ?? 2.3508);
+      locationData = await location.getLocation();
 
-  //     if (response.statusCode == 200) {
-  //       currentWeather = CurrentWeather.fromJson(response.data);
-  //       current = currentWeather?.current;
-  //       update();
-  //     } else {
-  //       if (kDebugMode) {
-  //         print(response.message);
-  //       }
-  //     }
-  //   } catch (e) {
-  //     if (kDebugMode) {
-  //       print(e.toString());
-  //     }
-  //   }
-  // }
+      ApiResponse response = await repo.getCurrentWeatherByCoordinates(
+          locationData.latitude ?? 48.8567, locationData.longitude ?? 2.3508);
+      if (response.statusCode == 200) {
+        currentWeather = WeatherForecast.fromJson(response.data);
+        update();
+      } else {
+        if (kDebugMode) {
+          print(response.message);
+        }
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    }
+  }
 
-  Future<void> getWeatherForecast({int? days}) async {
+  Future<void> getWeatherForecast({int? days = 14}) async {
     try {
       Location location = Location();
 
@@ -91,8 +90,6 @@ class HomeController extends GetxController {
 
       locationData = await location.getLocation();
 
-      
-
       ApiResponse response = await repo.getWeatherForecastByCoordinates(
           lat: locationData.latitude ?? 48.8567,
           lng: locationData.longitude ?? 2.3508,
@@ -116,7 +113,8 @@ class HomeController extends GetxController {
 
   String getImageName(String imageUrl) {
     var namelist = imageUrl.split('/');
-    return "/${namelist.elementAt(5)}/${namelist.elementAt(6)}";
+    final path = "/${namelist.elementAt(5)}/${namelist.elementAt(6)}";
+    return path;
   }
 
   String getDateFormated(String dateTime) {
@@ -125,7 +123,7 @@ class HomeController extends GetxController {
       DateFormat dateFormat = DateFormat('yyyy-MM-dd');
       return "${dateFormat.format(date)}   ${DateFormat.jm().format(date)}";
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
       return "";
     }
   }

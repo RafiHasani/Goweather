@@ -7,11 +7,11 @@ class AppBarWidget extends StatelessWidget {
   final bool showActionList;
   final List<Widget>? actionList;
   const AppBarWidget({
-    Key? key,
+    super.key,
     required this.title,
     this.actionList,
     this.showActionList = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

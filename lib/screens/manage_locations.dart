@@ -77,8 +77,8 @@ class LocationWeatherWidget extends StatelessWidget {
   final String maxDegree;
   final String minDegree;
 
-  LocationWeatherWidget({
-    Key? key,
+  const LocationWeatherWidget({
+    super.key,
     required this.locationName,
     required this.locationCity,
     required this.locationCounty,
@@ -86,7 +86,7 @@ class LocationWeatherWidget extends StatelessWidget {
     required this.degree,
     required this.maxDegree,
     required this.minDegree,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -183,7 +183,7 @@ class LocationWeatherWidget extends StatelessWidget {
                       children: [
                         Text(
                           maxDegree,
-                          style: TextStyle(color: Colors.white70),
+                          style: const TextStyle(color: Colors.white70),
                         ),
                         Transform.translate(
                           offset: const Offset(1, -5),
@@ -200,7 +200,7 @@ class LocationWeatherWidget extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Text(
+                    const Text(
                       " / ",
                       style: TextStyle(color: Colors.white),
                     ),
@@ -208,7 +208,7 @@ class LocationWeatherWidget extends StatelessWidget {
                       children: [
                         Text(
                           minDegree,
-                          style: TextStyle(color: Colors.white70),
+                          style: const TextStyle(color: Colors.white70),
                         ),
                         Transform.translate(
                           offset: const Offset(1, -5),

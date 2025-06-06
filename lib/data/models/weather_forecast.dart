@@ -1,5 +1,5 @@
 class WeatherForecast {
-  mfLocation? location;
+  MfLocation? location;
   Current? current;
   Forecast? forecast;
 
@@ -7,7 +7,7 @@ class WeatherForecast {
 
   WeatherForecast.fromJson(Map<String, dynamic> json) {
     location =
-        json['location'] != null ? mfLocation.fromJson(json['location']) : null;
+        json['location'] != null ? MfLocation.fromJson(json['location']) : null;
     current =
         json['current'] != null ? Current.fromJson(json['current']) : null;
     forecast =
@@ -29,7 +29,7 @@ class WeatherForecast {
   }
 }
 
-class mfLocation {
+class MfLocation {
   String? name;
   String? region;
   String? country;
@@ -39,7 +39,7 @@ class mfLocation {
   int? localtimeEpoch;
   String? localtime;
 
-  mfLocation(
+  MfLocation(
       {this.name,
       this.region,
       this.country,
@@ -49,7 +49,7 @@ class mfLocation {
       this.localtimeEpoch,
       this.localtime});
 
-  mfLocation.fromJson(Map<String, dynamic> json) {
+  MfLocation.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     region = json['region'];
     country = json['country'];
@@ -334,7 +334,7 @@ class Day {
   double? totalsnowCm;
   double? avgvisKm;
   double? avgvisMiles;
-  double? avghumidity;
+  int? avghumidity;
   int? dailyWillItRain;
   int? dailyChanceOfRain;
   int? dailyWillItSnow;
@@ -431,7 +431,7 @@ class Astro {
   String? moonrise;
   String? moonset;
   String? moonPhase;
-  String? moonIllumination;
+  int? moonIllumination;
   int? isMoonUp;
   int? isSunUp;
 
@@ -542,6 +542,11 @@ class Hour {
       this.uv,
       this.airQuality});
 
+  double? parseValues(dynamic value) {
+    if (value == null) return null;
+    return double.tryParse(value.toString());
+  }
+
   Hour.fromJson(Map<String, dynamic> json) {
     timeEpoch = json['time_epoch'];
     time = json['time'];
@@ -577,7 +582,8 @@ class Hour {
     visMiles = json['vis_miles'];
     gustMph = json['gust_mph'];
     gustKph = json['gust_kph'];
-    uv = json['uv'];
+
+    uv = parseValues(json['uv']);
     airQuality = json['air_quality'] != null
         ? AirQuality.fromJson(json['air_quality'])
         : null;
